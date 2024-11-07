@@ -8,7 +8,7 @@ function Home() {
 
   useEffect(() => {
     const getAds = async () => {
-      const res = await axios.get('http://localhost:5000/api/auth/events');
+      const res = await axios.get('http://localhost:5000/api/auth/all-events');
       console.log(res.data.data);
       setEvents(res.data.data);
     }
@@ -32,11 +32,11 @@ function Home() {
   // }, []);
 
   return (
-    <div className="h-screen flex flex-col bg-gray-100">
-      <div className="w-full fixed top-0">
+    <div className="min-h-screen flex flex-col bg-white">
+      <div className="w-full fixed top-0 z-10">
         <Navbar active="home"/>
       </div>
-      <div className="flex flex-grow mt-16 p-4">
+      <div className="flex mt-16 p-4">
         <div className="w-full p-4">
           <h1 className="text-2xl font-bold mb-4">Welcome to the Zoroastrian Community!</h1>
           <p className="text-lg">

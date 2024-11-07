@@ -11,16 +11,33 @@ function Signup({ setIsSignedUp }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+  
+    // Basic validations
+    if (!email || !password || !name) {
+      alert('All fields are required');
+      return;
+    }
+  
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+      alert('Please enter a valid email address');
+      return;
+    }
+  
+    if (password.length < 6) {
+      alert('Password must be at least 6 characters long');
+      return;
+    }
+  
     try {
       console.log(email, password, name);
       await axios.post('http://localhost:5000/api/auth/signup', { email, name, password });
-      //localStorage.setItem('isSignedUp', 'true');
-      //setIsSignedUp(true);
       navigate('/login'); // Redirect to login page
     } catch (error) {
-      console.error(error.response.data.message);
+      console.error(error.response?.data?.message || 'There was an error during signup');
     }
   };
+  
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">

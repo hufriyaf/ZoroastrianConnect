@@ -25,14 +25,15 @@ function App() {
   return (
     <Router>
       <Routes>
-      <Route path='/login' element={isLoggedIn? <Navigate to='/home'/>: <Login/>}/>
+      <Route path='/' element={<Login/>}/>
+      <Route path='/login' element={<Login/>}/>
       <Route path='/signup' element={<Signup/>}/>
-        <Route path='/home' element={isLoggedIn? <Home/>: <Navigate to='/login'/>}/>
+        <Route path='/home' element={ <Home/>}/>
         <Route path='/myevents' element={<MyEventsPage/>}/>
         <Route path='/myprofile' element={<ProfilePage/>}/>
         <Route path='/aboutus' element={<AboutUsPage/>}/>
         <Route path="/edit-profile" element={<EditProfilePage/>}/>
-        <Route path="*" element={<Navigate to={!isSignedUp ? "/" : !isLoggedIn ? "/login" : "/home"} />} />
+        <Route path="*" element={<Login/>}/>
       </Routes>
     </Router>
   );

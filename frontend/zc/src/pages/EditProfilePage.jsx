@@ -41,7 +41,13 @@ function EditProfilePage() {
       console.log(user);
       const response = await axios.put(`http://localhost:5000/api/auth/update-user/${localStorage.getItem('email')}`, user);
       console.log(response.data);
-      navigate('/profile'); // Redirect to profile page after update
+
+      // Ensure the user is updated successfully before navigating
+      if (response.status === 200) {
+        navigate('/myprofile'); // Redirect to profile page after update
+      } else {
+        console.error('Error updating user: ', response.data);
+      }
     } catch (error) {
       console.error('Error updating user:', error);
     }

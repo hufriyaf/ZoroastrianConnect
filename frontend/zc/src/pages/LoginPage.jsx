@@ -1,25 +1,41 @@
 import { useState } from 'react';
 import axios from 'axios';
-import { Navigate, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 function Login({ setIsLoggedIn }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const [error, setError] = useState('');
   const navigate = useNavigate();
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(''); // Clear any previous errors
+
     try {
       const response = await axios.post('http://localhost:5000/api/auth/login', { email, password });
-      localStorage.setItem('email', email);
-      localStorage.setItem('isLoggedIn', true);
-      navigate('/home');
-    } catch (err) {  // Use 'err' instead of 'error'
-      console.error(err);  // Log the error correctly
+
+      // Assuming the API returns { message: 'Login successful', user: { ... } }
+      if (response.status === 200) {
+        const userData = response.data.user;
+
+        // Store user data in localStorage (optional) or use context
+        localStorage.setItem('email', userData.email);
+        localStorage.setItem('isLoggedIn', true);
+
+        // Set the isLoggedIn state if needed (if using context)
+        //setIsLoggedIn(true);
+
+        console.log(localStorage.getItem('email'));
+
+        // Navigate to the home page
+        navigate('/home');
+      }
+    } catch (err) {
+      console.error('Login error:', err);
+      setError('Invalid credentials. Please try again.');
     }
   };
-  
 
   return (
     <div className="flex justify-center items-center min-h-screen bg-gray-100">
@@ -44,6 +60,7 @@ function Login({ setIsLoggedIn }) {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                   />
+                  {error && <p className="text-red-500 mt-3">{error}</p>}
                   <button
                     type="submit"
                     className="mt-5 tracking-wide font-semibold bg-indigo-500 text-gray-100 w-full py-4 rounded-lg hover:bg-indigo-700 transition-all duration-300 ease-in-out flex items-center justify-center focus:shadow-outline focus:outline-none"
